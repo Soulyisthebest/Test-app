@@ -1252,8 +1252,7 @@ export default function App() {
               ) : (
                 <form onSubmit={handleAdminLogin} className="space-y-4">
                   <div className="space-y-2">
-                    <p className="text-[10px] text-amber-500 uppercase tracking-widest font-mono font-bold font-sans">Consola Única para Colaboradores de Plataforma</p>
-                    <p className="text-xs text-gray-400 leading-snug font-sans">Panel administrativo con métricas SAAS, filtros de candidatos a empresas, alertas de conversión e IA Advisor.</p>
+                    <p className="text-xs text-gray-400 leading-snug font-sans">Acceso restringido. Solo personal autorizado.</p>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
