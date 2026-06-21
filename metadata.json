@@ -1,0 +1,6 @@
+{
+  "name": "Spain Study Portal",
+  "description": "Comprehensive guide & language portal for Arab students in Spain: visa/study pathways, survival guides, and gamified Spanish learning.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
