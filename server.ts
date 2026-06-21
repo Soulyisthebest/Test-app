@@ -140,6 +140,10 @@ async function startServer(){
   app.post("/api/auth/student-login",async(req:any,res:any)=>{
     const{email,name,lastName,phone,country,age,gender,currentEducation,academicGoal,city,targetCity,currentCountry}=req.body;
     if(!email)return res.status(400).json({error:"El correo electronico es requerido."});
+    
+    // IP check: one email per IP at a time
+    const clientIP = req.headers["x-forwarded-for"]?.toString().split(",")[0]?.trim() || req.socket.remoteAddress || "unknown";
+    
     let s=await findStu(email);
     if(s){if(s.isBlocked)return res.status(403).json({success:false,error:"SU ACCESO HA SIDO TEMPORALMENTE RESTRINGIDO. Motivo: Infraccion recurrente de las Directrices de la Comunidad."});}
     else{s={id:`stud_${Date.now()}`,name:name||email.split("@")[0],lastName:lastName||"",phone:phone||"",email:email.toLowerCase(),country:country||"Morocco",city:city||"Rabat",targetCity:targetCity||"Madrid",gender:gender||"Masculino",age:age?Number(age):20,language:"fr",level:"A1",academicGoal:academicGoal||"FP Grado Superior",currentEducation:currentEducation||"Bachillerato",currentCountry:currentCountry||country||"Morocco",professionalGoal:"Estudiante de FP / Universidad",xp:0,streak:1,completedLessons:0,completedExams:0,studyTimeMinutes:0,hasCv:false,registrationDate:new Date().toISOString().split("T")[0],premiumStatus:false,vocationalTopChoice:"Informatica",isInternshipReady:false,hasJobReady:false,activeInCommunity:true,channel:"Direct",paymentAmount:0,isBlocked:false};await saveStu(s);}
