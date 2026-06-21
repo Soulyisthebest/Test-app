@@ -43,13 +43,14 @@ async function initDB() {
       `);
       await db_client.query(`
         INSERT INTO app_data (key, value) VALUES
-          ('customMetrics', '{"totalPageViews":63820,"totalVisits":12450,"avgSessionSeconds":432,"bounceRatePercent":24.5}'),
-          ('alerts', '[{"id":"alert_1","title":"Crecimiento del 45% en visados aprobados desde Marruecos","type":"success","timestamp":"Hace 2 horas"},{"id":"alert_2","title":"Descenso de registros en Argelia las ultimas 48h","type":"warning","timestamp":"Hace 5 horas"},{"id":"alert_3","title":"Tarjetas de Transporte funciona muy bien","type":"info","timestamp":"Hace 1 dia"}]'),
+          ('customMetrics', '{"totalPageViews":0,"totalVisits":0,"avgSessionSeconds":0,"bounceRatePercent":0}'),
+          ('alerts', '[]'),
           ('teachers', '[{"id":"teach_1","name":"Monica Ruiz Castro","subject":"Espanol A1-B2","email":"monica@espana-study.com","bio":"Profesora nativa de Madrid con 8 anos de experiencia.","phone":"+34 612 345 678","photoUrl":"https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200","rating":5},{"id":"teach_2","name":"Yassine El Amrani","subject":"PCE Selectividad","email":"yassine@espana-study.com","bio":"Doctor por la Universidad de Granada, especialista en UNEDasiss.","phone":"+34 688 123 456","photoUrl":"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=200","rating":5},{"id":"teach_3","name":"Prof. Alberto Sanz","subject":"Espanol Tecnico FP","email":"alberto@espana-study.com","bio":"Especialista en terminologia tecnica para DAW, DAM, Sanidad.","phone":"+34 633 987 654","photoUrl":"https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200","rating":4.8}]')
         ON CONFLICT (key) DO NOTHING;
       `);
-      const { rows } = await db_client.query("SELECT COUNT(*) FROM students");
-      if (parseInt(rows[0].count) === 0) await seedPostgres();
+      // No fake students - start fresh with real data only
+      // const { rows } = await db_client.query("SELECT COUNT(*) FROM students");
+      // if (parseInt(rows[0].count) === 0) await seedPostgres();
       usePostgres = true;
       console.log("Connected to PostgreSQL");
     } catch(e) {
@@ -93,7 +94,7 @@ function seedStudents(): Student[] {
 
 function readJson(): DB {
   try{if(fs.existsSync(DB_FILE)){const db=JSON.parse(fs.readFileSync(DB_FILE,"utf-8"));if(!db.teachers)db.teachers=getTeachers();return db;}}catch(e){}
-  const db: DB={students:seedStudents(),communityMessages:[{id:"msg_1",user:"Youssef Alaoui",text:"Hola! Alguien ha solicitado el visado en Rabat recientemente?",time:"2026-06-21T11:20:00Z",email:"youssef@example.com"},{id:"msg_2",user:"Sofia Mansouri",text:"Hola Youssef, la cita previa suele tardar unos 10 dias. Organizate bien!",time:"2026-06-21T11:22:00Z",email:"sofia@example.com"},{id:"msg_3",user:"Profesor de Espana",text:"CONSEJO: Asegurate de que tu seguro medico privado sea sin copago y tenga cobertura de repatriacion.",time:"2026-06-21T11:23:00Z",system:true}],customMetrics:{totalPageViews:63820,totalVisits:12450,avgSessionSeconds:432,bounceRatePercent:24.5},alerts:[{id:"alert_1",title:"Crecimiento del 45% en visados aprobados desde Marruecos",type:"success",timestamp:"Hace 2 horas"},{id:"alert_2",title:"Descenso de registros en Argelia las ultimas 48h",type:"warning",timestamp:"Hace 5 horas"},{id:"alert_3",title:"Tarjetas de Transporte funciona muy bien",type:"info",timestamp:"Hace 1 dia"}],teachers:getTeachers()};
+  const db: DB={students:[],communityMessages:[],customMetrics:{totalPageViews:0,totalVisits:0,avgSessionSeconds:0,bounceRatePercent:0},alerts:[],teachers:getTeachers()};
   fs.writeFileSync(DB_FILE,JSON.stringify(db,null,2),"utf-8");return db;
 }
 function writeJson(db: DB){try{fs.writeFileSync(DB_FILE,JSON.stringify(db,null,2),"utf-8");}catch(e){}}
