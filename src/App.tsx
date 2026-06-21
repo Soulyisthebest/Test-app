@@ -245,13 +245,13 @@ export default function App() {
       setAuthError("Ingrese el correo administrativo y contraseña.");
       return;
     }
-    if (adminEmailInput.trim().toLowerCase() === "soullis8@gmail.com" && adminPasswordInput === "Bestmaneve123_") {
+    if (adminEmailInput.trim().toLowerCase() === "soullis8@gmail.com" && adminPasswordInput === "Sullivanem123") {
       localStorage.setItem("sp_user_role", "admin");
       localStorage.setItem("sp_logged_email", "soullis8@gmail.com");
       setUserRole("admin");
       setLoggedInEmail("soullis8@gmail.com");
     } else {
-      setAuthError("Credenciales inválidas. Acceso restringido.");
+      setAuthError("Acceso denegado.");
     }
   };
 
